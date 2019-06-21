@@ -1,9 +1,17 @@
-void setup() {
-  // put your setup code here, to run once:
 
+void setup() {
+  Serial.begin(38400);
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  String str;
+  if(Serial.available() > 0){
+    str = Serial.readString();
+  }
+  if(str == "b"){
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
+  }
 }
