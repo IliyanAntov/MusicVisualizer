@@ -22,17 +22,21 @@ namespace WindowsControlApplication {
         private Queue<double> lowMidHistory = new Queue<double>();
         private int historyMaxSize;
 
+        private double secondsToBuffer = 1;
+
+        private double bassMultiplier = 3;
+
         private double bassAverage = 0;
         private double lowMidAverage = 0;
 
         private int variance = 0;
         private int historyLength = 0;
 
-        private int bassLowFreq = 20;
+        private int bassLowFreq = 30;
         private int bassHighFreq = 130;
 
-        int lowMidLowFreq = 300;
-        int lowMidHighFreq = 750;
+        int lowMidLowFreq = 250;
+        int lowMidHighFreq = 500;
 
         int hzPerItem;
         int bassItemsToSkip;
@@ -75,14 +79,13 @@ namespace WindowsControlApplication {
             }
 
             hzPerItem = (RATE / 2) / (BUFFER_SIZE / 2);
-            historyMaxSize = RATE / (BUFFER_SIZE / 2);
+            historyMaxSize = (int)((RATE / (BUFFER_SIZE / 2)) * secondsToBuffer);
 
             bassItemsToSkip = bassLowFreq / hzPerItem;
             bassItemsToTake = (bassHighFreq - bassLowFreq) / hzPerItem;
 
             lowMidItemsToSkip = lowMidLowFreq / hzPerItem;
             lowMidItemsToTake = (lowMidHighFreq - lowMidLowFreq) / hzPerItem;
-
             Console.WriteLine(lowMidItemsToSkip);
             Console.WriteLine(lowMidItemsToTake);
             Console.WriteLine(historyMaxSize);
@@ -93,11 +96,13 @@ namespace WindowsControlApplication {
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            port.Write("b");
+            port.Write("s");
+            UpdateTimer.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e) {
             port.Write("e");
+            UpdateTimer.Enabled = false;
 
         }
 
@@ -121,7 +126,6 @@ namespace WindowsControlApplication {
 
                 //    // store the value in Ys as a percent (+/- 100% = 200%)
                 pcm[i] = (double)(val) / Math.Pow(2, 16) * 200.0;
-                //    //Console.WriteLine(pcm[i]);
             }
 
             // calculate the full FFT
@@ -133,16 +137,14 @@ namespace WindowsControlApplication {
 
             // just keep the real half (the other half imaginary)
             Array.Copy(fft, fftReal, fftReal.Length);
-            //Console.WriteLine(fftMaxFreq + " " + fftReal.Count() + " " + fftPointSpacingHz);
 
-            //int[] newfftReal = fftReal.Select(x => (int)(x * x)).ToArray();
-            double[] newfftReal = fftReal.Select(x => (x)).ToArray();
+            double[] newfftReal = fftReal.Select(x => (x * x)).ToArray();
 
             double currentBassValues = newfftReal.Skip(bassItemsToSkip).Take(bassItemsToTake).Average();
             double currentLowMidValues = newfftReal.Skip(lowMidItemsToSkip).Take(lowMidItemsToTake).Average();
-            
-            if (currentBassValues > (5 * bassAverage)) {
-                Console.WriteLine(currentBassValues);
+
+            if (currentBassValues > (bassMultiplier * bassAverage) && currentBassValues >= 1) {
+                CalculateNumberOfLeds(currentBassValues, bassAverage);
             }
 
             //Keeping a 1s history of bass and low mids averages
@@ -158,13 +160,19 @@ namespace WindowsControlApplication {
 
             bassAverage = bassHistory.Average();
             lowMidAverage = lowMidHistory.Average();
+        }
 
-            //Console.WriteLine(newfftReal.Average());
-            //Console.WriteLine(fftReal.Skip(2).Take(3).Max());
-            //if (fftReal.Skip(2).Take(3).Where(x => x >= 20).Count() > 1) {
-            //    Console.WriteLine(fftReal.Skip(2).Take(3).Max());
-            //    Console.WriteLine();
-            //}
+        private void CalculateNumberOfLeds(double currentBassValues, double bassAverage) {
+            double jump = currentBassValues / bassAverage;
+            if (jump < 10) {
+                port.Write("2");
+            }
+            else if (jump >= 10 && jump <= 100) {
+                port.Write("4");
+            }
+            else {
+                port.Write("8");
+            }
         }
 
         public double[] FFT(double[] data) {
@@ -177,5 +185,26 @@ namespace WindowsControlApplication {
                 fft[i] = fftComplex[i].Magnitude;
             return fft;
         }
+
+        private void SlowButton_Click(object sender, EventArgs e) {
+            port.Write("l");
+        }
+
+        private void MediumButton_Click(object sender, EventArgs e) {
+            port.Write("m");
+        }
+
+        private void FastButton_Click(object sender, EventArgs e) {
+            port.Write("f");
+        }
+
+        private void VFastButton_Click(object sender, EventArgs e) {
+            port.Write("v");
+        }
+
+        private void SensitivityBar_Scroll(object sender, EventArgs e) {
+            bassMultiplier = SensitivityBar.Value;
+        }
+
     }
 }

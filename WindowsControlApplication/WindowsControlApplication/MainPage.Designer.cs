@@ -28,12 +28,19 @@
             this.startButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.SlowButton = new System.Windows.Forms.Button();
+            this.MediumButton = new System.Windows.Forms.Button();
+            this.FastButton = new System.Windows.Forms.Button();
+            this.VFastButton = new System.Windows.Forms.Button();
+            this.SensitivityBar = new System.Windows.Forms.TrackBar();
+            this.Sensitivity = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.SensitivityBar)).BeginInit();
             this.SuspendLayout();
             // 
             // startButton
             // 
             this.startButton.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startButton.Location = new System.Drawing.Point(94, 75);
+            this.startButton.Location = new System.Drawing.Point(269, 128);
             this.startButton.Name = "startButton";
             this.startButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.startButton.Size = new System.Drawing.Size(158, 76);
@@ -45,7 +52,7 @@
             // stopButton
             // 
             this.stopButton.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stopButton.Location = new System.Drawing.Point(94, 214);
+            this.stopButton.Location = new System.Drawing.Point(269, 266);
             this.stopButton.Name = "stopButton";
             this.stopButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.stopButton.Size = new System.Drawing.Size(158, 76);
@@ -56,22 +63,101 @@
             // 
             // UpdateTimer
             // 
-            this.UpdateTimer.Enabled = true;
             this.UpdateTimer.Interval = 10;
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
+            // 
+            // SlowButton
+            // 
+            this.SlowButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SlowButton.Location = new System.Drawing.Point(12, 40);
+            this.SlowButton.Name = "SlowButton";
+            this.SlowButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.SlowButton.Size = new System.Drawing.Size(87, 41);
+            this.SlowButton.TabIndex = 3;
+            this.SlowButton.Text = "Slow";
+            this.SlowButton.UseVisualStyleBackColor = true;
+            this.SlowButton.Click += new System.EventHandler(this.SlowButton_Click);
+            // 
+            // MediumButton
+            // 
+            this.MediumButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MediumButton.Location = new System.Drawing.Point(132, 40);
+            this.MediumButton.Name = "MediumButton";
+            this.MediumButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.MediumButton.Size = new System.Drawing.Size(94, 41);
+            this.MediumButton.TabIndex = 4;
+            this.MediumButton.Text = "Medium";
+            this.MediumButton.UseVisualStyleBackColor = true;
+            this.MediumButton.Click += new System.EventHandler(this.MediumButton_Click);
+            // 
+            // FastButton
+            // 
+            this.FastButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FastButton.Location = new System.Drawing.Point(254, 40);
+            this.FastButton.Name = "FastButton";
+            this.FastButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.FastButton.Size = new System.Drawing.Size(87, 41);
+            this.FastButton.TabIndex = 5;
+            this.FastButton.Text = "Fast";
+            this.FastButton.UseVisualStyleBackColor = true;
+            this.FastButton.Click += new System.EventHandler(this.FastButton_Click);
+            // 
+            // VFastButton
+            // 
+            this.VFastButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.VFastButton.Location = new System.Drawing.Point(364, 40);
+            this.VFastButton.Name = "VFastButton";
+            this.VFastButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.VFastButton.Size = new System.Drawing.Size(97, 41);
+            this.VFastButton.TabIndex = 6;
+            this.VFastButton.Text = "Very fast";
+            this.VFastButton.UseVisualStyleBackColor = true;
+            this.VFastButton.Click += new System.EventHandler(this.VFastButton_Click);
+            // 
+            // SensitivityBar
+            // 
+            this.SensitivityBar.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SensitivityBar.Location = new System.Drawing.Point(25, 159);
+            this.SensitivityBar.Maximum = 11;
+            this.SensitivityBar.Minimum = 1;
+            this.SensitivityBar.Name = "SensitivityBar";
+            this.SensitivityBar.RightToLeftLayout = true;
+            this.SensitivityBar.Size = new System.Drawing.Size(214, 45);
+            this.SensitivityBar.TabIndex = 9;
+            this.SensitivityBar.Value = 1;
+            this.SensitivityBar.Scroll += new System.EventHandler(this.SensitivityBar_Scroll);
+            // 
+            // Sensitivity
+            // 
+            this.Sensitivity.AutoSize = true;
+            this.Sensitivity.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Sensitivity.Location = new System.Drawing.Point(47, 119);
+            this.Sensitivity.Name = "Sensitivity";
+            this.Sensitivity.Size = new System.Drawing.Size(169, 37);
+            this.Sensitivity.TabIndex = 10;
+            this.Sensitivity.Text = "Sensitivity";
+            this.Sensitivity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(349, 398);
+            this.ClientSize = new System.Drawing.Size(473, 413);
+            this.Controls.Add(this.Sensitivity);
+            this.Controls.Add(this.SensitivityBar);
+            this.Controls.Add(this.VFastButton);
+            this.Controls.Add(this.FastButton);
+            this.Controls.Add(this.MediumButton);
+            this.Controls.Add(this.SlowButton);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.startButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainPage";
             this.Text = "LED Control";
+            ((System.ComponentModel.ISupportInitialize)(this.SensitivityBar)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -80,6 +166,12 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.Timer UpdateTimer;
+        private System.Windows.Forms.Button SlowButton;
+        private System.Windows.Forms.Button MediumButton;
+        private System.Windows.Forms.Button FastButton;
+        private System.Windows.Forms.Button VFastButton;
+        private System.Windows.Forms.TrackBar SensitivityBar;
+        private System.Windows.Forms.Label Sensitivity;
     }
 }
 
