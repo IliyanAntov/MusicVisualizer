@@ -34,7 +34,11 @@
             this.VFastButton = new System.Windows.Forms.Button();
             this.SensitivityBar = new System.Windows.Forms.TrackBar();
             this.Sensitivity = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ShiftSpeed = new System.Windows.Forms.TrackBar();
+            this.StartA = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.SensitivityBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ShiftSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // startButton
@@ -138,12 +142,51 @@
             this.Sensitivity.Text = "Sensitivity";
             this.Sensitivity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(39, 248);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(187, 37);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Shift speed";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ShiftSpeed
+            // 
+            this.ShiftSpeed.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ShiftSpeed.Location = new System.Drawing.Point(25, 288);
+            this.ShiftSpeed.Maximum = 9;
+            this.ShiftSpeed.Minimum = 1;
+            this.ShiftSpeed.Name = "ShiftSpeed";
+            this.ShiftSpeed.RightToLeftLayout = true;
+            this.ShiftSpeed.Size = new System.Drawing.Size(214, 45);
+            this.ShiftSpeed.TabIndex = 13;
+            this.ShiftSpeed.Value = 1;
+            this.ShiftSpeed.Scroll += new System.EventHandler(this.ShiftSpeed_Scroll);
+            // 
+            // StartA
+            // 
+            this.StartA.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StartA.Location = new System.Drawing.Point(451, 159);
+            this.StartA.Name = "StartA";
+            this.StartA.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.StartA.Size = new System.Drawing.Size(219, 131);
+            this.StartA.TabIndex = 15;
+            this.StartA.Text = "Start Alternate";
+            this.StartA.UseVisualStyleBackColor = true;
+            this.StartA.Click += new System.EventHandler(this.StartA_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(473, 413);
+            this.ClientSize = new System.Drawing.Size(699, 369);
+            this.Controls.Add(this.StartA);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ShiftSpeed);
             this.Controls.Add(this.Sensitivity);
             this.Controls.Add(this.SensitivityBar);
             this.Controls.Add(this.VFastButton);
@@ -156,6 +199,7 @@
             this.Name = "MainPage";
             this.Text = "LED Control";
             ((System.ComponentModel.ISupportInitialize)(this.SensitivityBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ShiftSpeed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,6 +216,9 @@
         private System.Windows.Forms.Button VFastButton;
         private System.Windows.Forms.TrackBar SensitivityBar;
         private System.Windows.Forms.Label Sensitivity;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TrackBar ShiftSpeed;
+        private System.Windows.Forms.Button StartA;
     }
 }
 

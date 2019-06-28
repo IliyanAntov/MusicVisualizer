@@ -206,5 +206,13 @@ namespace WindowsControlApplication {
             bassMultiplier = SensitivityBar.Value;
         }
 
+        private void ShiftSpeed_Scroll(object sender, EventArgs e) {
+            port.Write(ShiftSpeed.Value.ToString());
+        }
+
+        private void StartA_Click(object sender, EventArgs e) {
+            port.Write("a");
+            UpdateTimer.Enabled = true;
+        }
     }
 }
