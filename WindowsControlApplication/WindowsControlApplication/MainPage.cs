@@ -18,6 +18,28 @@ namespace WindowsControlApplication {
 
         private int RATE = 48000;
         private int BUFFER_SIZE = (int)Math.Pow(2, 11);
+        private Queue<double> bassHistory = new Queue<double>();
+        private Queue<double> lowMidHistory = new Queue<double>();
+        private int historyMaxSize;
+
+        private double bassAverage = 0;
+        private double lowMidAverage = 0;
+
+        private int variance = 0;
+        private int historyLength = 0;
+
+        private int bassLowFreq = 20;
+        private int bassHighFreq = 130;
+
+        int lowMidLowFreq = 300;
+        int lowMidHighFreq = 750;
+
+        int hzPerItem;
+        int bassItemsToSkip;
+        int bassItemsToTake;
+        int lowMidItemsToSkip;
+        int lowMidItemsToTake;
+
 
         private SerialPort port = new SerialPort("COM5", 115200);
 
@@ -32,25 +54,38 @@ namespace WindowsControlApplication {
         }
 
         private void RecordAudio() {
+
             WaveIn wi = new WaveIn();
             wi.DeviceNumber = 1;
             wi.WaveFormat = new NAudio.Wave.WaveFormat(RATE, 1);
-            wi.BufferMilliseconds = (int)((double)BUFFER_SIZE / (double)RATE * 1000.0);
+
+            double bytesPerMs = (1 / (double)RATE) * 1000;
+            wi.BufferMilliseconds =  (int)(BUFFER_SIZE * bytesPerMs);
+
             wi.DataAvailable += new EventHandler<WaveInEventArgs>(AudioDataAvailable);
+
             bwp = new BufferedWaveProvider(wi.WaveFormat);
-            bwp.BufferLength = BUFFER_SIZE * 2;
+            bwp.BufferLength = BUFFER_SIZE;
             bwp.DiscardOnBufferOverflow = true;
             try {
                 wi.StartRecording();
             }
             catch {
-                string msg = "Could not record from audio device!\n\n";
-                msg += "Is your microphone plugged in?\n";
-                msg += "Is it set as your default recording device?";
-                Console.WriteLine(msg, "ERROR");
+                Console.WriteLine("Error reading audio input");
             }
-            Console.WriteLine(WaveIn.DeviceCount);
-            
+
+            hzPerItem = (RATE / 2) / (BUFFER_SIZE / 2);
+            historyMaxSize = RATE / (BUFFER_SIZE / 2);
+
+            bassItemsToSkip = bassLowFreq / hzPerItem;
+            bassItemsToTake = (bassHighFreq - bassLowFreq) / hzPerItem;
+
+            lowMidItemsToSkip = lowMidLowFreq / hzPerItem;
+            lowMidItemsToTake = (lowMidHighFreq - lowMidLowFreq) / hzPerItem;
+
+            Console.WriteLine(lowMidItemsToSkip);
+            Console.WriteLine(lowMidItemsToTake);
+            Console.WriteLine(historyMaxSize);
         }
 
         private void InitializeCommunication() {
@@ -67,10 +102,9 @@ namespace WindowsControlApplication {
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e) {
-            int frameSize = BUFFER_SIZE;
-            var audioBytes = new byte[frameSize];
-            bwp.Read(audioBytes, 0, frameSize);
 
+            var audioBytes = new byte[BUFFER_SIZE];
+            bwp.Read(audioBytes, 0, BUFFER_SIZE);
 
             int BYTES_PER_POINT = 2;
             int graphPointCount = audioBytes.Length / BYTES_PER_POINT;
@@ -82,39 +116,55 @@ namespace WindowsControlApplication {
 
             // populate Xs and Ys with double data
             for (int i = 0; i < graphPointCount; i++) {
-                // read the int16 from the two bytes
+                //    // read the int16 from the two bytes
                 Int16 val = BitConverter.ToInt16(audioBytes, i * 2);
 
-                // store the value in Ys as a percent (+/- 100% = 200%)
+                //    // store the value in Ys as a percent (+/- 100% = 200%)
                 pcm[i] = (double)(val) / Math.Pow(2, 16) * 200.0;
+                //    //Console.WriteLine(pcm[i]);
             }
 
             // calculate the full FFT
             fft = FFT(pcm);
 
             // determine horizontal axis units for graphs
-            double pcmPointSpacingMs = RATE / 1000;
             double fftMaxFreq = RATE / 2;
-            double fftPointSpacingHz = fftMaxFreq / graphPointCount;
+            double hzPerValue = fftMaxFreq / graphPointCount;
 
             // just keep the real half (the other half imaginary)
             Array.Copy(fft, fftReal, fftReal.Length);
+            //Console.WriteLine(fftMaxFreq + " " + fftReal.Count() + " " + fftPointSpacingHz);
 
-            ////Console.WriteLine(fft.Count());
-            //for (int i = 0; i < fftReal.Count(); i++) {
-            //    Console.Write((int)fftReal[i] + ", ");
-            //}
-            int[] newfftReal = fftReal.Select(x => (int)x).ToArray();
-            if (newfftReal.Take(10).Where(x => x >= 7).Count() > 1){
-                Random rnd = new Random();
-                int a = rnd.Next(1, 100);
-                Console.WriteLine(a);
-                Console.WriteLine();
-                //Console.WriteLine(newfftReal.First());
-                //Console.WriteLine();
+            //int[] newfftReal = fftReal.Select(x => (int)(x * x)).ToArray();
+            double[] newfftReal = fftReal.Select(x => (x)).ToArray();
+
+            double currentBassValues = newfftReal.Skip(bassItemsToSkip).Take(bassItemsToTake).Average();
+            double currentLowMidValues = newfftReal.Skip(lowMidItemsToSkip).Take(lowMidItemsToTake).Average();
+            
+            if (currentBassValues > (5 * bassAverage)) {
+                Console.WriteLine(currentBassValues);
             }
-            
-            
+
+            //Keeping a 1s history of bass and low mids averages
+            historyLength = bassHistory.Count();
+
+            if (historyLength >= historyMaxSize) {
+                bassHistory.Dequeue();
+                lowMidHistory.Dequeue();
+            }
+
+            bassHistory.Enqueue(currentBassValues);
+            lowMidHistory.Enqueue(currentLowMidValues);
+
+            bassAverage = bassHistory.Average();
+            lowMidAverage = lowMidHistory.Average();
+
+            //Console.WriteLine(newfftReal.Average());
+            //Console.WriteLine(fftReal.Skip(2).Take(3).Max());
+            //if (fftReal.Skip(2).Take(3).Where(x => x >= 20).Count() > 1) {
+            //    Console.WriteLine(fftReal.Skip(2).Take(3).Max());
+            //    Console.WriteLine();
+            //}
         }
 
         public double[] FFT(double[] data) {
