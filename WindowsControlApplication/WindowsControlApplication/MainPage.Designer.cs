@@ -33,10 +33,11 @@
             this.FastButton = new System.Windows.Forms.Button();
             this.VFastButton = new System.Windows.Forms.Button();
             this.SensitivityBar = new System.Windows.Forms.TrackBar();
-            this.Sensitivity = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.ShiftSpeed = new System.Windows.Forms.TrackBar();
             this.StartA = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.Sensitivity = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.SensitivityBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ShiftSpeed)).BeginInit();
             this.SuspendLayout();
@@ -44,26 +45,26 @@
             // startButton
             // 
             this.startButton.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startButton.Location = new System.Drawing.Point(269, 128);
+            this.startButton.Location = new System.Drawing.Point(304, 196);
             this.startButton.Name = "startButton";
             this.startButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.startButton.Size = new System.Drawing.Size(158, 76);
+            this.startButton.Size = new System.Drawing.Size(219, 131);
             this.startButton.TabIndex = 0;
-            this.startButton.Text = "Start";
+            this.startButton.Text = "Start Default";
             this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.button1_Click);
+            this.startButton.Click += new System.EventHandler(this.StartDefaultButton_Click);
             // 
             // stopButton
             // 
             this.stopButton.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stopButton.Location = new System.Drawing.Point(269, 266);
+            this.stopButton.Location = new System.Drawing.Point(412, 357);
             this.stopButton.Name = "stopButton";
             this.stopButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.stopButton.Size = new System.Drawing.Size(158, 76);
+            this.stopButton.Size = new System.Drawing.Size(238, 93);
             this.stopButton.TabIndex = 1;
             this.stopButton.Text = "Stop";
             this.stopButton.UseVisualStyleBackColor = true;
-            this.stopButton.Click += new System.EventHandler(this.button2_Click);
+            this.stopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
             // UpdateTimer
             // 
@@ -73,7 +74,7 @@
             // SlowButton
             // 
             this.SlowButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SlowButton.Location = new System.Drawing.Point(12, 40);
+            this.SlowButton.Location = new System.Drawing.Point(166, 99);
             this.SlowButton.Name = "SlowButton";
             this.SlowButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.SlowButton.Size = new System.Drawing.Size(87, 41);
@@ -85,7 +86,7 @@
             // MediumButton
             // 
             this.MediumButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MediumButton.Location = new System.Drawing.Point(132, 40);
+            this.MediumButton.Location = new System.Drawing.Point(286, 99);
             this.MediumButton.Name = "MediumButton";
             this.MediumButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.MediumButton.Size = new System.Drawing.Size(94, 41);
@@ -97,7 +98,7 @@
             // FastButton
             // 
             this.FastButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FastButton.Location = new System.Drawing.Point(254, 40);
+            this.FastButton.Location = new System.Drawing.Point(408, 99);
             this.FastButton.Name = "FastButton";
             this.FastButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.FastButton.Size = new System.Drawing.Size(87, 41);
@@ -109,19 +110,19 @@
             // VFastButton
             // 
             this.VFastButton.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VFastButton.Location = new System.Drawing.Point(364, 40);
+            this.VFastButton.Location = new System.Drawing.Point(518, 99);
             this.VFastButton.Name = "VFastButton";
             this.VFastButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.VFastButton.Size = new System.Drawing.Size(97, 41);
             this.VFastButton.TabIndex = 6;
             this.VFastButton.Text = "Very fast";
             this.VFastButton.UseVisualStyleBackColor = true;
-            this.VFastButton.Click += new System.EventHandler(this.VFastButton_Click);
+            this.VFastButton.Click += new System.EventHandler(this.VeryFastButton_Click);
             // 
             // SensitivityBar
             // 
             this.SensitivityBar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.SensitivityBar.Location = new System.Drawing.Point(25, 159);
+            this.SensitivityBar.Location = new System.Drawing.Point(39, 249);
             this.SensitivityBar.Maximum = 11;
             this.SensitivityBar.Minimum = 1;
             this.SensitivityBar.Name = "SensitivityBar";
@@ -131,23 +132,11 @@
             this.SensitivityBar.Value = 1;
             this.SensitivityBar.Scroll += new System.EventHandler(this.SensitivityBar_Scroll);
             // 
-            // Sensitivity
-            // 
-            this.Sensitivity.AutoSize = true;
-            this.Sensitivity.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Sensitivity.Location = new System.Drawing.Point(47, 119);
-            this.Sensitivity.Name = "Sensitivity";
-            this.Sensitivity.Size = new System.Drawing.Size(169, 37);
-            this.Sensitivity.TabIndex = 10;
-            this.Sensitivity.Text = "Sensitivity";
-            this.Sensitivity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Sensitivity.Click += new System.EventHandler(this.Sensitivity_Click);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(39, 248);
+            this.label1.Location = new System.Drawing.Point(53, 338);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(187, 37);
             this.label1.TabIndex = 14;
@@ -157,7 +146,7 @@
             // ShiftSpeed
             // 
             this.ShiftSpeed.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ShiftSpeed.Location = new System.Drawing.Point(25, 288);
+            this.ShiftSpeed.Location = new System.Drawing.Point(39, 378);
             this.ShiftSpeed.Maximum = 9;
             this.ShiftSpeed.Minimum = 1;
             this.ShiftSpeed.Name = "ShiftSpeed";
@@ -170,25 +159,48 @@
             // StartA
             // 
             this.StartA.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StartA.Location = new System.Drawing.Point(451, 159);
+            this.StartA.Location = new System.Drawing.Point(549, 196);
             this.StartA.Name = "StartA";
             this.StartA.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartA.Size = new System.Drawing.Size(219, 131);
             this.StartA.TabIndex = 15;
             this.StartA.Text = "Start Alternate";
             this.StartA.UseVisualStyleBackColor = true;
-            this.StartA.Click += new System.EventHandler(this.StartA_Click);
+            this.StartA.Click += new System.EventHandler(this.StartAlternateButton_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(134, 47);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(516, 37);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "Default visualization travel speed";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // Sensitivity
+            // 
+            this.Sensitivity.AutoSize = true;
+            this.Sensitivity.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Sensitivity.Location = new System.Drawing.Point(62, 209);
+            this.Sensitivity.Name = "Sensitivity";
+            this.Sensitivity.Size = new System.Drawing.Size(169, 37);
+            this.Sensitivity.TabIndex = 17;
+            this.Sensitivity.Text = "Sensitivity";
+            this.Sensitivity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(699, 369);
+            this.ClientSize = new System.Drawing.Size(813, 499);
+            this.Controls.Add(this.Sensitivity);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.StartA);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ShiftSpeed);
-            this.Controls.Add(this.Sensitivity);
             this.Controls.Add(this.SensitivityBar);
             this.Controls.Add(this.VFastButton);
             this.Controls.Add(this.FastButton);
@@ -216,10 +228,11 @@
         private System.Windows.Forms.Button FastButton;
         private System.Windows.Forms.Button VFastButton;
         private System.Windows.Forms.TrackBar SensitivityBar;
-        private System.Windows.Forms.Label Sensitivity;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar ShiftSpeed;
         private System.Windows.Forms.Button StartA;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label Sensitivity;
     }
 }
 

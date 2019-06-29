@@ -9,15 +9,15 @@
 #define FRAMES_PER_SECOND 100
 
 char input; // s -> Start default visualization
-// a -> Start alternate visualization
-// e -> Turn off all LEDs / Stop visualization
-// l, m, f, v -> LED travel speed ([l]ow,[m]edium, [f]ast, [v]ery fast)
+            // a -> Start alternate visualization
+            // e -> Turn off all LEDs / Stop visualization
+            // l, m, f, v -> LED travel speed ([l]ow,[m]edium, [f]ast, [v]ery fast)
 
 int beatStrength; // Recieved by the PC every time there is a beat.
 
 int shiftAmount = 2; // How many spaces a single LED moves every cycle
 int colorShiftSpeed = 1; // Determines how fast the color changes (factor)
-float colorShiftMaxDelay = 40; // Maximum delay before the color changes (in ms)
+float colorShiftMaxDelay = 50; // Maximum delay before the color changes (in ms)
 float colorShiftDelay = (colorShiftMaxDelay / colorShiftSpeed); // Total delay for every color change (in ms)
 
 CRGB colors = {0, 0, 255}; // FastLED color struct for calculations (Starting color => blue)
@@ -118,6 +118,12 @@ void ReadInput(){ // Reads the user input from the PC application
     // Turn off all LEDs if the [e]nd command or invalid input is recieved
     if(input == 'e' || (input - '0' > 9 || input - '0' < 0)){
         TurnOffLeds();
+    }
+
+    // Change the color shift delay if a number is recieved
+    else if (input - '0' >= 1 && input - '0' <= 9) {
+        colorShiftSpeed = input - '0';
+        colorShiftDelay = (colorShiftMaxDelay / colorShiftSpeed);
     }
 }
 
@@ -240,9 +246,11 @@ void ShiftColors(){ // Shifts the colors of the strip after a set amount of time
             colors.blue++;
             colors.red--;
         }
+
         else if (colorCounter >= 1020 && colorCounter < 1275){  // Back to blue
             colors.green--;
         }
+
         else {
             colorCounter = 0;
             colorCounter--;
