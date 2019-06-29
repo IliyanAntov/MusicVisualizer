@@ -95,7 +95,7 @@ void loop() {
     }
 
     // Change the color shift speed
-    else if (input - '0' >= 0 && input - '0' <= 9){
+    else if (input - '0' >= 1 && input - '0' <= 9){
         colorShiftSpeed = input - '0';
         colorShiftDelay = colorShiftMaxDelay / colorShiftSpeed;
     }
