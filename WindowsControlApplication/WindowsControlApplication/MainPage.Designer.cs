@@ -141,6 +141,7 @@
             this.Sensitivity.TabIndex = 10;
             this.Sensitivity.Text = "Sensitivity";
             this.Sensitivity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Sensitivity.Click += new System.EventHandler(this.Sensitivity_Click);
             // 
             // label1
             // 

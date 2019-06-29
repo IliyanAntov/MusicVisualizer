@@ -214,5 +214,9 @@ namespace WindowsControlApplication {
             port.Write("a");
             UpdateTimer.Enabled = true;
         }
+
+        private void Sensitivity_Click(object sender, EventArgs e) {
+
+        }
     }
 }
