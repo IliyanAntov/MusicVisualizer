@@ -20,13 +20,16 @@ int colorShiftSpeed = 1; // Determines how fast the color changes (factor)
 float colorShiftMaxDelay = 40; // Maximum delay before the color changes (in ms)
 float colorShiftDelay = (colorShiftMaxDelay / colorShiftSpeed); // Total delay for every color change (in ms)
 
-CRGB colors = {0, 0, 0}; // FastLED color struct for calculations
+CRGB colors = {0, 0, 255}; // FastLED color struct for calculations (Starting color => blue)
+int colorCounter = 0; // Color change helper variable
 
 float lastChange = millis(); // Used for the non-blocking delay in the ShiftColors() function
 
 int brightnessFactor = 0; // (Alternate visualization) Determines how much brighter the LEDs need to be
 
 CRGB leds[NUM_LEDS]; // Array of all LEDs
+
+
 
 void setup() {
 
@@ -98,6 +101,48 @@ void loop() {
     }
 }
 
+
+
+void ReadInput(){ // Reads the user input from the PC application
+
+    // Setup the default value
+    input = '0';
+
+    // Wait for serial input
+    if(Serial.available() > 0){
+
+        // Write to the input variable
+        input = Serial.read();
+    }
+
+    // Turn off all LEDs if the [e]nd command or invalid input is recieved
+    if(input == 'e' || (input - '0' > 9 || input - '0' < 0)){
+        TurnOffLeds();
+    }
+}
+
+
+void DefaultVisualization(){ // Launches the default visualization routine
+
+    // Turn on the status LED
+    digitalWrite(LED_BUILTIN, HIGH);
+
+    do{
+        // Read the user input
+        ReadInput();
+
+        // Convert the user input to an integer
+        beatStrength = input - '0';
+
+        // Shift all LEDs and light up the recieved amount
+        ShiftLeds(beatStrength);
+
+        // Shift the colors
+        ShiftColors();
+
+    }while(input != 'e'); // Stop the visualization when [e]nd flag is recieved
+}
+
 void ShiftLeds(int ledsToLight){ // Shifts LEDs down the strip (Used for default visualization)
 
     // If input is recieved (= a beat), light up that many LEDs
@@ -124,72 +169,6 @@ void ShiftLeds(int ledsToLight){ // Shifts LEDs down the strip (Used for default
     FastLED.delay(1000/FRAMES_PER_SECOND);
 }
 
-void LightAllLeds(){ // Lights up every LED on the strip (Used for alternate visualization)
-
-    // Setup every LED with the current color
-    for(int i = 0; i < NUM_LEDS; i++){
-        leds[i] = colors;
-    }
-
-    // Update the strip
-    FastLED.show();
-    FastLED.delay(1000/FRAMES_PER_SECOND);
-}
-
-void ShiftColors(){ // Shifts the colors of the strip after a set amount of time
-
-    // Only update the colors if the given time has passed
-    if(millis() - lastChange > colorShiftDelay){
-        if (colors.blue >= colors.red && colors.blue < 255){
-            colors.blue++;
-        }
-        else if (colors.red <= colors.blue && colors.blue == 255) {
-            colors.red++;
-        }
-        else if (colors.blue <= colors.red && colors.red == 255 && colors.blue != 0){
-            colors.blue--;
-        }
-        else{
-            colors.red--;
-        }
-        lastChange = millis();
-    }
-}
-
-void TurnOffLeds(){ // Turns off every LED on the strip
-
-    // Turn off the status LED
-    digitalWrite(LED_BUILTIN, LOW);
-
-    // Turn off every LED
-    for(int i = 0; i < NUM_LEDS ; i++) {
-        leds[i] = CRGB(0,0,0);
-    }
-
-    // Update the strip
-    FastLED.show();
-}
-
-void DefaultVisualization(){ // Launches the default visualization routine
-
-    // Turn on the status LED
-    digitalWrite(LED_BUILTIN, HIGH);
-
-    do{
-        // Read the user input
-        ReadInput();
-
-        // Convert the user input to an integer
-        beatStrength = input - '0';
-
-        // Shift all LEDs and light up the recieved amount
-        ShiftLeds(beatStrength);
-
-        // Shift the colors
-        ShiftColors();
-
-    }while(input != 'e'); // Stop the visualization when [e]nd flag is recieved
-}
 
 void AlternateVisualization(){ // Launches the alternate visualization routine
 
@@ -227,20 +206,63 @@ void AlternateVisualization(){ // Launches the alternate visualization routine
     }while(input != 'e');
 }
 
-void ReadInput(){ // Reads the user input from the PC application
+void LightAllLeds(){ // Lights up every LED on the strip (Used for alternate visualization)
 
-    // Setup the default value
-    input = '0';
-
-    // Wait for serial input
-    if(Serial.available() > 0){
-
-        // Write to the input variable
-        input = Serial.read();
+    // Setup every LED with the current color
+    for(int i = 0; i < NUM_LEDS; i++){
+        leds[i] = colors;
     }
 
-    // Turn off all LEDs if the [e]nd command or invalid input is recieved
-    if(input == 'e' || (input - '0' > 9 || input - '0' < 0)){
-        TurnOffLeds();
+    // Update the strip
+    FastLED.show();
+    FastLED.delay(1000/FRAMES_PER_SECOND);
+}
+
+
+void ShiftColors(){ // Shifts the colors of the strip after a set amount of time
+
+    // Only update the colors if the given time has passed
+    if(millis() - lastChange > colorShiftDelay){
+
+        if(colorCounter < 255){ // To pink
+            colors.red++;
+        }
+
+        else if (colorCounter >= 255 && colorCounter < 510){ // To white
+            colors.green++;
+        }
+
+        else if (colorCounter >= 510 && colorCounter < 765){ // To yellow
+            colors.blue--;
+        }
+
+        else if (colorCounter >= 765 && colorCounter < 1020){  // To cyan
+            colors.blue++;
+            colors.red--;
+        }
+        else if (colorCounter >= 1020 && colorCounter < 1275){  // Back to blue
+            colors.green--;
+        }
+        else {
+            colorCounter = 0;
+            colorCounter--;
+        }
+
+        colorCounter++;
+        lastChange = millis();
     }
+}
+
+void TurnOffLeds(){ // Turns off every LED on the strip
+
+    // Turn off the status LED
+    digitalWrite(LED_BUILTIN, LOW);
+
+    // Turn off every LED
+    for(int i = 0; i < NUM_LEDS ; i++) {
+        leds[i] = CRGB(0,0,0);
+    }
+
+    // Update the strip
+    FastLED.show();
 }
