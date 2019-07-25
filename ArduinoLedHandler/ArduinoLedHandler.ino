@@ -4,7 +4,8 @@
 #define LED_TYPE WS2811
 #define COLOR_ORDER GRB
 
-#define BRIGHTNESS 5
+#define BRIGHTNESS 100
+#define ALTERNATE_BRIGHTNESS 1
 #define MAX_BRIGHTNESS 125
 #define FRAMES_PER_SECOND 100
 
@@ -29,7 +30,9 @@ int brightnessFactor = 0; // (Alternate visualization) Determines how much brigh
 
 CRGB leds[NUM_LEDS]; // Array of all LEDs
 
-
+int ledShiftCounter = 0;
+int ledShiftAmount = 10;
+int flag = 0;
 
 void setup() {
 
@@ -60,13 +63,17 @@ void loop() {
     }
 
     // If 's' is recieved, begin default visualization
-    if(input == 's'){
+    if(input == 'a'){
         DefaultVisualization();
     }
 
     // If 'a' is recieved, begin alternate visualization
-    else if(input == 'a'){
+    else if(input == 'b'){
         AlternateVisualization();
+    }
+
+    else if(input == 'c'){
+        LightShiftVisualization();
     }
 
     // If 'e' is recieved, turn off all LEDs and end visualization
@@ -133,6 +140,8 @@ void DefaultVisualization(){ // Launches the default visualization routine
     // Turn on the status LED
     digitalWrite(LED_BUILTIN, HIGH);
 
+    FastLED.setBrightness(BRIGHTNESS);
+
     do{
         // Read the user input
         ReadInput();
@@ -186,7 +195,7 @@ void AlternateVisualization(){ // Launches the alternate visualization routine
         ReadInput();
 
         // Turn the brightness down every iteration until it is at the default level
-        if (brightnessFactor > 0){
+        if (brightnessFactor > ALTERNATE_BRIGHTNESS){
             brightnessFactor -= 1;
         }
 
@@ -194,14 +203,14 @@ void AlternateVisualization(){ // Launches the alternate visualization routine
         int beatStrength = input - '0';
 
         // Check if the brightness can be turned up
-        if(brightnessFactor + (beatStrength*3) + BRIGHTNESS <= MAX_BRIGHTNESS){
+        if(brightnessFactor + (beatStrength*3) + ALTERNATE_BRIGHTNESS <= MAX_BRIGHTNESS){
 
             // Increase the brightness factor
             brightnessFactor += (beatStrength*3);
         }
 
         // Set the new brightness
-        FastLED.setBrightness(BRIGHTNESS + brightnessFactor);
+        FastLED.setBrightness(ALTERNATE_BRIGHTNESS + brightnessFactor);
 
         // Light up all leds with the new brightness
         LightAllLeds();
@@ -217,6 +226,102 @@ void LightAllLeds(){ // Lights up every LED on the strip (Used for alternate vis
     // Setup every LED with the current color
     for(int i = 0; i < NUM_LEDS; i++){
         leds[i] = colors;
+    }
+
+    // Update the strip
+    FastLED.show();
+    FastLED.delay(1000/FRAMES_PER_SECOND);
+}
+
+
+void LightShiftVisualization(){
+
+    // Turn on the status LED
+    digitalWrite(LED_BUILTIN, HIGH);
+
+    FastLED.setBrightness(BRIGHTNESS);
+
+    do{
+        // Read the user input
+        ReadInput();
+
+        // Convert the user input to an integer
+        beatStrength = input - '0';
+
+        // Shift all LEDs and light up the recieved amount
+        AlternateShiftLeds(beatStrength);
+
+        // Shift the colors
+        ShiftColors();
+
+    }while(input != 'e'); // Stop the visualization when [e]nd flag is recieved
+}
+
+void AlternateShiftLeds(int beatStrength){ // Shifts LEDs down the strip (Used for default visualization)
+
+    // If input is recieved (= a beat), light up that many LEDs
+    if(beatStrength == 2){
+
+        for(int i = NUM_LEDS-1; i >= ledShiftAmount; i--){
+
+            if(i % (ledShiftAmount + (ledShiftCounter%2)*3) == 0){
+                leds[i] = colors;
+            }
+            else{
+                leds[i] = CRGB(0, 0, 0);
+            }
+            leds[i] = leds[i-ledShiftAmount];
+        }
+
+
+        ledShiftCounter++;
+    }
+
+    else if (beatStrength > 2){
+
+        int start = 3;
+
+        if(ledShiftCounter % 2 == 0){
+            start = 0;
+        }
+
+        for(int i = start; i <= NUM_LEDS-1; i++){
+            if((ledShiftAmount + i) % (ledShiftAmount + (ledShiftCounter%2)*3) == 0){
+                leds[i] = CRGB(0,0,0);
+            }
+            else{
+                leds[i] = colors;
+            }
+        }
+        flag = 200;
+
+    }
+
+    else if (flag >= 1){
+
+        if(flag == 100){
+            for(int i = NUM_LEDS-1; i >= ledShiftAmount; i--){
+
+                if(i % (ledShiftAmount + (ledShiftCounter%2)*3) == 0){
+                    leds[i] = colors;
+                }
+                else{
+                    leds[i] = CRGB(0, 0, 0);
+                }
+            }
+        }
+
+        for(int i = NUM_LEDS-1; i >= ledShiftAmount; i--){
+
+            if(i % (ledShiftAmount + (ledShiftCounter%2)*3) == 0){
+                leds[i] = colors;
+            }
+            else{
+                leds[i] = CRGB(0, 0, 0);
+            }
+        }
+
+        flag--;
     }
 
     // Update the strip

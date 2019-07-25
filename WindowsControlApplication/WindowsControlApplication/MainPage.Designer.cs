@@ -38,6 +38,7 @@
             this.StartA = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.Sensitivity = new System.Windows.Forms.Label();
+            this.StartLightShiftButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.SensitivityBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ShiftSpeed)).BeginInit();
             this.SuspendLayout();
@@ -57,7 +58,7 @@
             // stopButton
             // 
             this.stopButton.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stopButton.Location = new System.Drawing.Point(412, 357);
+            this.stopButton.Location = new System.Drawing.Point(412, 513);
             this.stopButton.Name = "stopButton";
             this.stopButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.stopButton.Size = new System.Drawing.Size(238, 93);
@@ -190,12 +191,25 @@
             this.Sensitivity.Text = "Sensitivity";
             this.Sensitivity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // StartLightShiftButton
+            // 
+            this.StartLightShiftButton.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StartLightShiftButton.Location = new System.Drawing.Point(296, 361);
+            this.StartLightShiftButton.Name = "StartLightShiftButton";
+            this.StartLightShiftButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.StartLightShiftButton.Size = new System.Drawing.Size(227, 131);
+            this.StartLightShiftButton.TabIndex = 18;
+            this.StartLightShiftButton.Text = "Start Light Shift";
+            this.StartLightShiftButton.UseVisualStyleBackColor = true;
+            this.StartLightShiftButton.Click += new System.EventHandler(this.StartLightShiftButton_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(813, 499);
+            this.ClientSize = new System.Drawing.Size(813, 633);
+            this.Controls.Add(this.StartLightShiftButton);
             this.Controls.Add(this.Sensitivity);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.StartA);
@@ -233,6 +247,7 @@
         private System.Windows.Forms.Button StartA;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label Sensitivity;
+        private System.Windows.Forms.Button StartLightShiftButton;
     }
 }
 

@@ -127,7 +127,7 @@ namespace WindowsControlApplication {
         private void StartDefaultButton_Click(object sender, EventArgs e) { // Executes when the "Start default" button is pressed
 
             // Writes the default visualization start flag to the serial port
-            port.Write("s");
+            port.Write("a");
 
             // Enables the update timer, allowing beat detection to begin
             UpdateTimer.Enabled = true;
@@ -136,7 +136,16 @@ namespace WindowsControlApplication {
         private void StartAlternateButton_Click(object sender, EventArgs e) { // Executes when the "Start alternate" button is pressed
 
             // Writes the alternate visualization start flag to the serial port
-            port.Write("a");
+            port.Write("b");
+
+            // Enables the update timer, allowing beat detection to begin
+            UpdateTimer.Enabled = true;
+        }
+
+        private void StartLightShiftButton_Click(object sender, EventArgs e) {
+
+            // Writes the light shift visualization start flag to the serial port
+            port.Write("c");
 
             // Enables the update timer, allowing beat detection to begin
             UpdateTimer.Enabled = true;
@@ -304,6 +313,5 @@ namespace WindowsControlApplication {
             // Writes the new sensitivity value to the serial port
             port.Write(ShiftSpeed.Value.ToString());
         }
-
     }
 }
