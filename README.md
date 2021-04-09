@@ -1,10 +1,10 @@
-# MusicVisualizer
-Arduino-based music visualizer using a WS2812B strip
-
 # Визуализатор на музика<br/>Music visualizer
 
 # [Официална документация](./Documents/MusicVisualizer_Documentation_Iliyan_Antov.pdf)
 # [Презентация на проекта](https://docs.google.com/presentation/d/1Hubuf1_2Yw28AFvXF5u0pnuvvKj3GJBz7yWSgTEtRgM/edit?usp=sharing)
+
+## Демонстрация (Demo):
+https://user-images.githubusercontent.com/26661552/114189560-ff07c780-9952-11eb-97ac-d56dab42e3f6.mp4
 
 *Визуализатор на музика, базиран на WS2812B лента LED пиксели. С помощта на собствен алгоритъм за засичане на ритъм (Beat detection algorithm), базиран на анализ на Фурие (FFT), приложението изпраща информация към микроконтролер Arduino Uno R3. Предаването на информация става посредсвром серийна връзка през USB кабел и собствен протокол. Микроконтролерът обработва информацията и визуализира ритъма върху свързаната към него лента LED пиксели.*
 
