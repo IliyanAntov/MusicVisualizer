@@ -6,7 +6,7 @@
 *Визуализатор на музика, базиран на WS2812B лента LED пиксели. С помощта на собствен алгоритъм за засичане на ритъм (Beat detection algorithm), базиран на анализ на Фурие (FFT), приложението изпраща информация към микроконтролер Arduino Uno R3. Предаването на информация става посредсвром серийна връзка през USB кабел и собствен протокол. Микроконтролерът обработва информацията и визуализира ритъма върху свързаната към него лента LED пиксели.*
 
 ## Демонстрация (Demo):
-![Demo](https://user-images.githubusercontent.com/26661552/114189560-ff07c780-9952-11eb-97ac-d56dab42e3f6.mp4)
+[![Video](https://img.youtube.com/vi/iBlsCsjuejA/hqdefault.jpg)](https://www.youtube.com/watch?v=iBlsCsjuejA)
 
 ## Блок схема:
 ![](./Documents/BlockScheme.png)
